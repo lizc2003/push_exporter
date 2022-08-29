@@ -12,7 +12,7 @@ type MetricValue struct {
 	Value      float64 `json:"value"`
 	Type       string  `json:"type"`
 	Step       int64   `json:"step"`
-	ExpireTime int64
+	ExpireTime int64   `json:"-"`
 }
 
 func (this *MetricValue) Key() string {

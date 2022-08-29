@@ -24,7 +24,7 @@ func NewMetricMgr() *MetricMgr {
 }
 
 func (this *MetricMgr) AddMetric(m *MetricValue, now int64) {
-	m.ExpireTime = now + m.Step
+	m.ExpireTime = now + m.Step + 2
 	key := m.Key()
 
 	this.mtx.Lock()
