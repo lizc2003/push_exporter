@@ -1,0 +1,12 @@
+[Unit]
+Description=Push exporter
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/data/push_exporter/push_exporter
+LimitCORE=infinity
+LimitNOFILE=655360
+
+[Install]
+WantedBy=multi-user.target
