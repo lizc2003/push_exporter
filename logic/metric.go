@@ -8,6 +8,7 @@ import (
 type MetricValue struct {
 	Metric     string  `json:"metric"`
 	Instance   string  `json:"endpoint"`
+	Job        string  `json:"job"`
 	Tags       string  `json:"tags"`
 	Value      float64 `json:"value"`
 	Type       string  `json:"type"`
@@ -16,7 +17,7 @@ type MetricValue struct {
 }
 
 func (this *MetricValue) Key() string {
-	return strings.Join([]string{this.Metric, this.Instance, this.Tags}, "|")
+	return strings.Join([]string{this.Metric, this.Instance, this.Job, this.Tags}, "|")
 }
 
 func (this *MetricValue) GaugeKey(labelNames []string) string {
@@ -24,8 +25,8 @@ func (this *MetricValue) GaugeKey(labelNames []string) string {
 }
 
 func (this *MetricValue) GetLabels() ([]string, []string) {
-	labelNames := []string{InstanceName}
-	labelVals := []string{this.Instance}
+	labelNames := []string{InstanceName, JobName}
+	labelVals := []string{this.Instance, this.Job}
 	if this.Tags != "" {
 		ss := strings.Split(this.Tags, ",")
 		for _, s := range ss {
@@ -45,9 +46,10 @@ func (this *MetricValue) IsValid(now int64) bool {
 
 func (this *MetricValue) String() string {
 	return fmt.Sprintf(
-		"<Metric:%s, Instance:%s, Tags:%s, Value:%f, Type:%s, Step:%d>",
+		"<Metric:%s, Instance:%s, Job:%s, Tags:%s, Value:%f, Type:%s, Step:%d>",
 		this.Metric,
 		this.Instance,
+		this.Job,
 		this.Tags,
 		this.Value,
 		this.Type,
