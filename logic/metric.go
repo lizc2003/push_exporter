@@ -20,8 +20,16 @@ func (this *MetricValue) Key() string {
 	return strings.Join([]string{this.Metric, this.Instance, this.Job, this.Tags}, "|")
 }
 
-func (this *MetricValue) GaugeKey(labelNames []string) string {
-	return this.Metric + "|" + strings.Join(labelNames, "|")
+func (this *MetricValue) MetricKey(labelNames []string) string {
+	var b strings.Builder
+	b.WriteString(this.Metric)
+	b.WriteByte('|')
+	b.WriteString(strings.Join(labelNames, "|"))
+	return b.String()
+}
+
+func (this *MetricValue) IsCounter() bool {
+	return this.Type == TypeCounter
 }
 
 func (this *MetricValue) GetLabels() ([]string, []string) {

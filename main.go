@@ -2,11 +2,9 @@ package main
 
 import (
 	"github.com/go-kit/log/level"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/lizc2003/push_exporter/logic"
 	"github.com/prometheus/common/promlog"
 	"github.com/prometheus/exporter-toolkit/web"
-	"github.com/lizc2003/push_exporter/logic"
 	"net/http"
 	"os"
 )
@@ -25,7 +23,8 @@ func main() {
 	metricMgr := logic.NewMetricMgr()
 
 	exporterHandler := logic.NewExporterHandler(metricMgr)
-	http.Handle("/metrics", promhttp.InstrumentMetricHandler(prometheus.DefaultRegisterer, exporterHandler))
+	//http.Handle("/metrics", promhttp.InstrumentMetricHandler(prometheus.DefaultRegisterer, exporterHandler))
+	http.Handle("/metrics", exporterHandler)
 
 	http.Handle("/push", logic.NewPushHandler(metricMgr))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

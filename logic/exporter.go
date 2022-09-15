@@ -32,15 +32,22 @@ func (this *Exporter) Collect(ch chan<- prometheus.Metric) {
 	metrics := mgr.GetMetrics()
 	for _, m := range metrics {
 		if m.IsValid(now) {
-			g, err := mgr.CreateGauge(m)
-			if err == nil {
-				ch <- g
+			if m.IsCounter() {
+				a, err := mgr.CreateCounter(m)
+				if err == nil {
+					ch <- a
+				}
+			} else {
+				g, err := mgr.CreateGauge(m)
+				if err == nil {
+					ch <- g
+				}
 			}
 		}
 	}
 }
 
-/////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////
 func NewExporterHandler(mgr *MetricMgr) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
