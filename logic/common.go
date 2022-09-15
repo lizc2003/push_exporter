@@ -5,6 +5,6 @@ const (
 	InstanceName = "instance"
 	JobName      = "job"
 
-	TypeGauge   = "GAUGE"
-	TypeCounter = "COUNTER"
+	TypeGauge   = "G"
+	TypeCounter = "C"
 )
