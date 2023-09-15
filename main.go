@@ -31,8 +31,13 @@ func main() {
 		w.Write(landingPage)
 	})
 
-	srv := &http.Server{Addr: ":1999"}
-	if err := web.ListenAndServe(srv, "", logger); err != nil {
+	webConfigFile := ""
+	toolkitFlags := web.FlagConfig{
+		WebListenAddresses: &[]string{":1999"},
+		WebConfigFile:      &webConfigFile,
+	}
+	srv := &http.Server{}
+	if err := web.ListenAndServe(srv, &toolkitFlags, logger); err != nil {
 		level.Error(logger).Log("msg", "Error starting HTTP server", "err", err)
 		os.Exit(1)
 	}
