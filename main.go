@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"github.com/go-kit/log/level"
 	"github.com/lizc2003/push_exporter/logic"
 	"github.com/prometheus/common/promlog"
@@ -33,7 +35,7 @@ func main() {
 
 	webConfigFile := ""
 	toolkitFlags := web.FlagConfig{
-		WebListenAddresses: &[]string{":1999"},
+		WebListenAddresses: &[]string{fmt.Sprintf(":%d", getListenPort())},
 		WebConfigFile:      &webConfigFile,
 	}
 	srv := &http.Server{}
@@ -41,4 +43,10 @@ func main() {
 		level.Error(logger).Log("msg", "Error starting HTTP server", "err", err)
 		os.Exit(1)
 	}
+}
+
+func getListenPort() int {
+	port := flag.Int("p", 1999, "port")
+	flag.Parse()
+	return *port
 }
