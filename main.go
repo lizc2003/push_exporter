@@ -3,9 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/go-kit/log/level"
 	"github.com/lizc2003/push_exporter/logic"
-	"github.com/prometheus/common/promlog"
+	"github.com/prometheus/common/promslog"
 	"github.com/prometheus/exporter-toolkit/web"
 	"net/http"
 	"os"
@@ -21,7 +20,7 @@ func main() {
 </html>
 `)
 
-	logger := promlog.New(&promlog.Config{})
+	logger := promslog.New(&promslog.Config{})
 	metricMgr := logic.NewMetricMgr()
 
 	exporterHandler := logic.NewExporterHandler(metricMgr)
@@ -40,7 +39,7 @@ func main() {
 	}
 	srv := &http.Server{}
 	if err := web.ListenAndServe(srv, &toolkitFlags, logger); err != nil {
-		level.Error(logger).Log("msg", "Error starting HTTP server", "err", err)
+		logger.Error("Error starting HTTP server", "err", err)
 		os.Exit(1)
 	}
 }

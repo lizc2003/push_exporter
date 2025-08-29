@@ -27,6 +27,13 @@ func NewMetricMgr() *MetricMgr {
 }
 
 func (this *MetricMgr) AddMetric(m *MetricValue, now int64) {
+	if m.Metric == "" {
+		return
+	}
+
+	if m.Step == 0 {
+		m.Step = 5 // default 5s
+	}
 	m.ExpireTime = now + m.Step + 2
 	switch m.Type {
 	case TypeCounter:
